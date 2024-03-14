@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/models/category.dart';
 import 'package:todo_app/screens/home_screen.dart';
+import 'package:todo_app/services/category_service.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -9,6 +11,12 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
+  var _categoryNameController = TextEditingController();
+  var _categoryDescriptionController = TextEditingController();
+
+  var _category = Category();
+  var _categoryService = CategoryService();
+
   _showFormDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -16,22 +24,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         builder: (param) {
           return AlertDialog(
             actions: [
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    ContinuousRectangleBorder(),
-                  ),
-                ),
-                onPressed: () {},
+              TextButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white),
+                onPressed: () {
+                  _category.name = _categoryNameController.text;
+                  _category.description = _categoryDescriptionController.text;
+                  _categoryService.saveCategory(_category);
+                },
                 child: Text("Accept"),
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
-                    ContinuousRectangleBorder(),
-                  ),
-                ),
-                onPressed: () {},
+              TextButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, foregroundColor: Colors.white),
+                onPressed: () => Navigator.pop(context),
                 child: Text("Cancel"),
               ),
             ],
@@ -40,10 +47,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               child: Column(
                 children: [
                   TextField(
+                    controller: _categoryNameController,
                     decoration: InputDecoration(
                         hintText: "Write a Category", labelText: "Category"),
                   ),
                   TextField(
+                    controller: _categoryDescriptionController,
                     decoration: InputDecoration(
                         hintText: "Write a Description",
                         labelText: "Description"),
