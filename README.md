@@ -1,3 +1,3 @@
-# todo_app
+# to-do_app
 
-A Simple to-to app made on flutter
+A Simple to-do app made on flutter
