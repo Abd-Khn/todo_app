@@ -15,6 +15,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         barrierDismissible: true,
         builder: (param) {
           return AlertDialog(
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStatePropertyAll(
+                    ContinuousRectangleBorder(),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text("Accept"),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStatePropertyAll(
+                    ContinuousRectangleBorder(),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text("Cancel"),
+              ),
+            ],
             title: Text("Categories Form"),
             content: SingleChildScrollView(
               child: Column(
