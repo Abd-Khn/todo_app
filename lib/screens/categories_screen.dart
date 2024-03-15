@@ -17,6 +17,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   var _category = Category();
   var _categoryService = CategoryService();
 
+  List<Category> _categoryList = [];
+  @override
+  void initState() {
+    super.initState();
+    getAllCategories();
+  }
+
+  getAllCategories() async {
+    var categories = await _categoryService.readCategories();
+    categories.forEach((category) {
+      setState(() {
+        var categoryModel = Category();
+        categoryModel.name = category['name'];
+        categoryModel.description = category['description'];
+        categoryModel.id = category['id'];
+        _categoryList.add(categoryModel);
+      });
+    });
+  }
+
   _showFormDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -31,7 +51,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 onPressed: () {
                   _category.name = _categoryNameController.text;
                   _category.description = _categoryDescriptionController.text;
-                  _categoryService.saveCategory(_category);
+                  var result = _categoryService.saveCategory(_category);
+                  print(result);
                 },
                 child: Text("Accept"),
               ),
@@ -79,7 +100,30 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         backgroundColor: Colors.deepPurple.withOpacity(0.8),
         foregroundColor: Colors.white,
       ),
-      body: Center(child: Text("Categories")),
+      body: ListView.builder(
+          itemCount: _categoryList.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: ListTile(
+                leading: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {},
+                ),
+                title: Row(
+                  children: [
+                    Text(_categoryList[index].name),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showFormDialog(context);
